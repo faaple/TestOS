@@ -37,8 +37,7 @@ fn clear_bss() {
 #[unsafe(no_mangle)]
 /// The entry point
 fn rust_main() {
-    println!("Hello, world!");
-    crate::syscalls::sys_exit(9);
     clear_bss();
+    println!("Hello, world!");
     crate::sbi::shutdown();
 }

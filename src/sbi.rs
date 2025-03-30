@@ -4,6 +4,10 @@
 //! and the **firmware/hypervisor** (running in **machine mode**, M-mode).
 //! It allows the OS to request privileged operations.
 
+/// SBI code for console putchar
+const SBI_CONSOLE_PUTCHAR: usize = 1;
+
+/// SBI code for shutdown
 const SBI_SHUTDOWN: usize = 8;
 
 /// General sbi call
@@ -22,6 +26,11 @@ fn sbi_call(which: usize, arg0: usize, arg1: usize, arg2: usize) -> usize {
         );
     }
     ret
+}
+
+/// use sbi call to putchar in console (qemu uart handler)
+pub fn console_putchar(c: usize) {
+    sbi_call(SBI_CONSOLE_PUTCHAR, c, 0, 0);
 }
 
 /// Use sbi call to shutdown the kernel

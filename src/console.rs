@@ -6,7 +6,9 @@ struct Stdout;
 
 impl Write for Stdout {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
-        crate::syscalls::sys_write(1, s.as_bytes());
+        for c in s.chars() {
+            crate::sbi::console_putchar(c as usize);
+        }
         Ok(())
     }
 }
