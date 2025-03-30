@@ -11,3 +11,4 @@ qemu-system-riscv64 \
             -nographic \
             -bios "$BOOTLOADER" \
             -device loader,file="$KERNEL_BIN".bin,addr="$KERNEL_ENTRY_PA"
+            
