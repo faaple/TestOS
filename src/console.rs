@@ -4,7 +4,7 @@ struct Stdout;
 
 impl Write for Stdout {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
-        crate::sys_write(1, s.as_bytes());
+        crate::syscalls::sys_write(1, s.as_bytes());
         Ok(())
     }
 }
