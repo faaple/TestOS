@@ -7,8 +7,10 @@ mod console;
 mod syscalls;
 mod sbi;
 
+core::arch::global_asm!(include_str!("entry.asm"));
+
 #[unsafe(no_mangle)]
-extern "C" fn _start() {
+fn rust_main() {
     println!("Hello, world!");
     crate::syscalls::sys_exit(9);
     crate::sbi::shutdown();
