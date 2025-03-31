@@ -6,10 +6,14 @@
 #![no_main]
 #![allow(dead_code)]
 
-mod lang_items;
+use log::*;
+
+#[macro_use]
 mod console;
+mod lang_items;
 mod syscalls;
 mod sbi;
+mod logging;
 
 core::arch::global_asm!(include_str!("entry.asm"));
 
@@ -38,6 +42,37 @@ fn clear_bss() {
 /// The entry point
 fn rust_main() {
     clear_bss();
-    println!("Hello, world!");
+    unsafe extern "C" {
+        fn stext(); // begin addr of text segment
+        fn etext(); // end addr of text segment
+        fn srodata(); // start addr of Read-Only data segment
+        fn erodata(); // end addr of Read-Only data ssegment
+        fn sdata(); // start addr of data segment
+        fn edata(); // end addr of data segment
+        fn sbss(); // start addr of BSS segment
+        fn ebss(); // end addr of BSS segment
+        fn boot_stack(); // stack lower bound
+        fn boot_stack_top(); // stack top
+    }
+    clear_bss();
+    logging::init();
+    println!("[kernel] Hello, world!");
+    trace!(
+        "[kernel] .text [{:#x}, {:#x})",
+        stext as usize, etext as usize
+    );
+    debug!(
+        "[kernel] .rodata [{:#x}, {:#x})",
+        srodata as usize, erodata as usize
+    );
+    info!(
+        "[kernel] .data [{:#x}, {:#x})",
+        sdata as usize, edata as usize
+    );
+    warn!(
+        "[kernel] boot_stack top={:#x}, bottom={:#x}",
+        boot_stack_top as usize, boot_stack as usize
+    );
+    error!("[kernel] .bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
     crate::sbi::shutdown();
 }
