@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BOOTLOADER=../2025s-rcore-faaple/bootloader/rustsbi-qemu.bin
+BOOTLOADER=rustsbi-qemu.bin
 KERNEL_BIN=target/riscv64gc-unknown-none-elf/release/os
 KERNEL_ENTRY_PA=0x80200000
 

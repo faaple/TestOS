@@ -11,7 +11,6 @@ use log::*;
 #[macro_use]
 mod console;
 mod lang_items;
-mod syscalls;
 mod sbi;
 mod logging;
 
