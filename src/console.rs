@@ -2,8 +2,12 @@
 
 use core::fmt::{self, Write};
 
+// The console
 struct Stdout;
 
+/// The interface (trait) that allows us to write into it.
+/// 
+/// This is inside the OS kernel, so we directly write through sbi call.
 impl Write for Stdout {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
         for c in s.chars() {
@@ -13,6 +17,9 @@ impl Write for Stdout {
     }
 }
 
+/// Print interface.
+///
+/// Call `Stdout`'s `Write` interface. Used by the marco.
 pub fn print(args: fmt::Arguments) {
     Stdout.write_fmt(args).unwrap();
 }
