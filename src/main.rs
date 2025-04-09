@@ -6,6 +6,9 @@
 #![no_main]
 #![allow(dead_code)]
 
+#[macro_use]
+extern crate log;
+
 use log::*;
 
 #[macro_use]
@@ -13,8 +16,14 @@ mod console;
 mod lang_items;
 mod sbi;
 mod logging;
+mod batch;
+
+pub mod syscall;
+pub mod sync;
+pub mod trap;
 
 core::arch::global_asm!(include_str!("entry.asm"));
+core::arch::global_asm!(include_str!("link_app.S"));
 
 /// Clear BSS segment
 /// 
@@ -73,5 +82,7 @@ fn rust_main() {
         boot_stack_top as usize, boot_stack as usize
     );
     error!("[kernel] .bss [{:#x}, {:#x})", sbss as usize, ebss as usize);
-    crate::sbi::shutdown();
+    trap::init();
+    batch::init();
+    batch::run_next_app();
 }
