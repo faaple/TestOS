@@ -19,15 +19,15 @@ core::arch::global_asm!(include_str!("trap.S"));
 
 /// initialize CSR `stvec` as  trap handler entry point, i.e., `__alltraps`.
 pub fn init() {
-    unsafe extern "C" {
-        unsafe fn __alltraps();
+    extern "C" {
+        fn __alltraps();
     }
     unsafe {
         stvec::write(__alltraps as usize, TrapMode::Direct);
     }
 }
 
-#[unsafe(no_mangle)]
+#[no_mangle]
 /// handle an interrupt, exception, or system call from user space
 /// 
 /// Through `__alltraps` trap handler entry point, context is saved 

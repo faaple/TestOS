@@ -37,7 +37,7 @@ core::arch::global_asm!(include_str!("link_app.S"));
 /// `.write_volatile(0)` writes `0` to the memory location
 /// and ensure the compiler does not optimize it away.
 fn clear_bss() {
-    unsafe extern "C" {
+    extern "C" {
         fn sbss();
         fn ebss();
     }
@@ -46,11 +46,11 @@ fn clear_bss() {
     });
 }
 
-#[unsafe(no_mangle)]
+#[no_mangle]
 /// The entry point
 fn rust_main() {
     clear_bss();
-    unsafe extern "C" {
+    extern "C" {
         fn stext(); // begin addr of text segment
         fn etext(); // end addr of text segment
         fn srodata(); // start addr of Read-Only data segment

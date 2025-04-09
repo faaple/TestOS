@@ -113,7 +113,7 @@ lazy_static! {
     /// if multiple borrows occur.
     static ref APP_MANAGER: UPSafeCell<AppManager> = unsafe {
         UPSafeCell::new({
-            unsafe extern "C" {
+            extern "C" {
                 fn _num_app();
             }
             let num_app_ptr = _num_app as usize as *const usize;
@@ -211,7 +211,7 @@ pub fn run_next_app() -> ! {
     drop(app_manager);
     // before this we have to drop local variables related to resources manually
     // and release the resources
-    unsafe extern "C" {
+    extern "C" {
         fn __restore(cx_addr: usize);
     }
     unsafe {
